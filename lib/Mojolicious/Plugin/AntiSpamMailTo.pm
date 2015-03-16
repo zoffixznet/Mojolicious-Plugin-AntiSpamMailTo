@@ -57,6 +57,14 @@ Mojolicious::Plugin::AntiSpamMailTo - Mojolicious plugin for obfuscating email a
         href="<%= mailto_href %>">Send me an email at <%= mailto %></a
     ></p>
 
+The output in the browser would be this, with each character in the
+email address HTML encoded:
+
+    <p><a
+        href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#122;&#111;&#102;&#102;&#105;&#120;&#64;&#99;&#112;&#97;&#110;&#46;&#99;&#111;&#109;">
+            Send me an email at &#122;&#111;&#102;&#102;&#105;&#120;&#64;&#99;&#112;&#97;&#110;&#46;&#99;&#111;&#109;
+    </a></p>
+
 =head1 DESCRIPTION
 
 L<Mojolicious::Plugin::AntiSpamMailTo> is a L<Mojolicious> plugin for
