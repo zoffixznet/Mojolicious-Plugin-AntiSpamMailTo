@@ -1,2 +1,81 @@
-# Mojolicious-Plugin-AntiSpamMailTo
-Mojolicious::Plugin::AntiSpamMailTo perl module
+# NAME
+
+Mojolicious::Plugin::AntiSpamMailTo - Mojolicious plugin for obfuscating email addresses
+
+# SYNOPSIS
+
+    #!/usr/bin/env perl
+
+    use Mojolicious::Lite;
+
+    plugin 'AntiSpamMailTo';
+
+    get '/' => 'index';
+
+    app->start;
+
+    __DATA__
+
+    @@ index.html.ep
+
+    <p><a
+        href="<%= mailto_href %>">Send me an email at <%= mailto %></a
+    ></p>
+
+# DESCRIPTION
+
+[Mojolicious::Plugin::AntiSpamMailTo](https://metacpan.org/pod/Mojolicious::Plugin::AntiSpamMailTo) is a [Mojolicious](https://metacpan.org/pod/Mojolicious) plugin for
+outputting email addresses as encoded HTML entities, which
+(kinda seems to) confuses a bunch of noobish spam bots, lowering the
+amount of crap you get sent to the address.
+
+# METHODS
+
+[Mojolicious::Plugin::AntiSpamMailTo](https://metacpan.org/pod/Mojolicious::Plugin::AntiSpamMailTo) inherits all methods from
+[Mojolicious::Plugin](https://metacpan.org/pod/Mojolicious::Plugin) and implements the following new ones.
+
+## register
+
+    $plugin->register(Mojolicious->new);
+
+Register plugin in [Mojolicious](https://metacpan.org/pod/Mojolicious) application.
+
+# HELPERS
+
+## `mailto`
+
+    Send me an email at <%== mailto 'zoffix@cpan.com' %>
+
+Takes one argument, an email address, and returns an encoded
+version of it.
+
+## `mailto_href`
+
+    <a href="<%== mailto 'zoffix@cpan.com' %>">Send me an email</a>
+
+This is what's you use in `href=""` attributes. Takes one
+argument, an email address, prepends string `mailto:` to it,
+and returns an encoded version of it.
+
+# REPOSITORY
+
+Fork this module on GitHub:
+[https://github.com/zoffixznet/Mojolicious-Plugin-AntiSpamMailTo](https://github.com/zoffixznet/Mojolicious-Plugin-AntiSpamMailTo)
+
+# BUGS
+
+To report bugs or request features, please use
+[https://github.com/zoffixznet/Mojolicious-Plugin-AntiSpamMailTo/issues](https://github.com/zoffixznet/Mojolicious-Plugin-AntiSpamMailTo/issues)
+
+If you can't access GitHub, you can email your request
+to `bug-mojolicious-plugin-antispammailto at rt.cpan.org`
+
+# AUTHOR
+
+Zoffix Znet `zoffix at cpan.org`, ([http://zoffix.com/](http://zoffix.com/))
+
+# LICENSE
+
+You can use and distribute this module under the same terms as Perl itself.
+See the `LICENSE` file included in this distribution for complete
+details.
