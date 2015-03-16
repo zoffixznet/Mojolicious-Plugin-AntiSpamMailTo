@@ -95,7 +95,7 @@ version of it.
 
 =head2 C<mailto_href>
 
-    <a href="<%== mailto 'zoffix@cpan.com' %>">Send me an email</a>
+    <a href="<%== mailto_href 'zoffix@cpan.com' %>">Send me an email</a>
 
 This is what's you use in C<< href="" >> attributes. Takes one
 argument, an email address, prepends string C<< mailto: >> to it,

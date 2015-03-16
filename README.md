@@ -19,8 +19,9 @@ Mojolicious::Plugin::AntiSpamMailTo - Mojolicious plugin for obfuscating email a
     @@ index.html.ep
 
     <p><a
-        href="<%= mailto_href %>">Send me an email at <%= mailto %></a
-    ></p>
+        href="<%== mailto_href 'zoffix@cpan.com' %>">
+            Send me an email at <%== mailto 'zoffix@cpan.com' %>
+    </a></p>
 
 The output in the browser would be this, with each character in the
 email address HTML encoded:
@@ -59,7 +60,7 @@ version of it.
 
 ## `mailto_href`
 
-    <a href="<%== mailto 'zoffix@cpan.com' %>">Send me an email</a>
+    <a href="<%== mailto_href 'zoffix@cpan.com' %>">Send me an email</a>
 
 This is what's you use in `href=""` attributes. Takes one
 argument, an email address, prepends string `mailto:` to it,
