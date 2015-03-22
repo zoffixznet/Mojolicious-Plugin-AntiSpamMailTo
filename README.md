@@ -9,6 +9,7 @@ Mojolicious::Plugin::AntiSpamMailTo - Mojolicious plugin for obfuscating email a
     use Mojolicious::Lite;
 
     plugin 'AntiSpamMailTo';
+    app->mailto('zoffix@cpan.com'); # save the address
 
     get '/' => 'index';
 
@@ -19,8 +20,30 @@ Mojolicious::Plugin::AntiSpamMailTo - Mojolicious plugin for obfuscating email a
     @@ index.html.ep
 
     <p><a
-        href="<%== mailto_href 'zoffix@cpan.com' %>">
-            Send me an email at <%== mailto 'zoffix@cpan.com' %>
+        href="<%== mailto_href %>">
+            Send me an email at <%== mailto %>
+    </a></p>
+
+Every call to `mailto_href()` or `mailto()` updates the globally
+stored email address. But you can use a different address each time:
+
+    #!/usr/bin/env perl
+
+    use Mojolicious::Lite;
+
+    plugin 'AntiSpamMailTo';
+
+    get '/' => 'index';
+
+    app->start;
+
+    __DATA__
+
+    @@ index.html.ep
+
+    <p><a
+        href="<%== mailto_href 'foo@example.com' %>">
+            Send me an email at <%== mailto 'bar@example.com' %>
     </a></p>
 
 The output in the browser would be this, with each character in the
@@ -55,16 +78,21 @@ Register plugin in [Mojolicious](https://metacpan.org/pod/Mojolicious) applicati
 
     Send me an email at <%== mailto 'zoffix@cpan.com' %>
 
-Takes one argument, an email address, and returns an encoded
-version of it.
+Takes one optional argument, an email address, and returns an encoded
+version of it. The email address gets stored, so any future
+calls without any arguments will use the address from the
+previous call to `mailto` or `mailto_href`.
 
 ## `mailto_href`
 
     <a href="<%== mailto_href 'zoffix@cpan.com' %>">Send me an email</a>
 
 This is what's you use in `href=""` attributes. Takes one
-argument, an email address, prepends string `mailto:` to it,
+optional argument, an email address, prepends string `mailto:` to it,
 and returns an encoded version of it.
+The email address gets stored so any future
+calls without any arguments will use the address from the
+previous call to `mailto` or `mailto_href`.
 
 # REPOSITORY
 

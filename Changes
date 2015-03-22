@@ -1,5 +1,10 @@
 Revision history for Mojolicious-Plugin-AntiSpamMailTo
 
+1.001003 2015-03-22
+    - Made the plugin remember the last email address used to allow
+        for reuse of helpers, without having to specify
+        email addresses more than once
+
 1.001002 2015-03-16
     - Fixed an error in the SYNOPSIS regarding usage
 

@@ -6,18 +6,26 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 use HTML::Entities;
 
+my $email;
+
 sub register {
     my ($self, $app) = @_;
 
     $app->helper(
         mailto_href => sub {
-            encode_entities 'mailto:' . $_[1], '\w\W';
+            shift; # dump the controller
+            @_ and $email = shift;
+            encode_entities 'mailto:' . $email, '\w\W';
         },
     );
 
     $app->helper(
         mailto => sub {
-            encode_entities $_[1], '\w\W';
+            shift; # dump the controller
+            @_ and $email = shift;
+            # the ''. is to ensure encode_entities doesn't modify
+            # email in-place
+            encode_entities ''.$email, '\w\W';
         },
     );
 }
@@ -44,6 +52,7 @@ Mojolicious::Plugin::AntiSpamMailTo - Mojolicious plugin for obfuscating email a
     use Mojolicious::Lite;
 
     plugin 'AntiSpamMailTo';
+    app->mailto('zoffix@cpan.com'); # save the address
 
     get '/' => 'index';
 
@@ -54,8 +63,30 @@ Mojolicious::Plugin::AntiSpamMailTo - Mojolicious plugin for obfuscating email a
     @@ index.html.ep
 
     <p><a
-        href="<%== mailto_href 'zoffix@cpan.com' %>">
-            Send me an email at <%== mailto 'zoffix@cpan.com' %>
+        href="<%== mailto_href %>">
+            Send me an email at <%== mailto %>
+    </a></p>
+
+Every call to C<mailto_href()> or C<mailto()> updates the globally
+stored email address. But you can use a different address each time:
+
+    #!/usr/bin/env perl
+
+    use Mojolicious::Lite;
+
+    plugin 'AntiSpamMailTo';
+
+    get '/' => 'index';
+
+    app->start;
+
+    __DATA__
+
+    @@ index.html.ep
+
+    <p><a
+        href="<%== mailto_href 'foo@example.com' %>">
+            Send me an email at <%== mailto 'bar@example.com' %>
     </a></p>
 
 The output in the browser would be this, with each character in the
@@ -90,16 +121,21 @@ Register plugin in L<Mojolicious> application.
 
     Send me an email at <%== mailto 'zoffix@cpan.com' %>
 
-Takes one argument, an email address, and returns an encoded
-version of it.
+Takes one optional argument, an email address, and returns an encoded
+version of it. The email address gets stored, so any future
+calls without any arguments will use the address from the
+previous call to C<mailto> or C<mailto_href>.
 
 =head2 C<mailto_href>
 
     <a href="<%== mailto_href 'zoffix@cpan.com' %>">Send me an email</a>
 
 This is what's you use in C<< href="" >> attributes. Takes one
-argument, an email address, prepends string C<< mailto: >> to it,
+optional argument, an email address, prepends string C<< mailto: >> to it,
 and returns an encoded version of it.
+The email address gets stored so any future
+calls without any arguments will use the address from the
+previous call to C<mailto> or C<mailto_href>.
 
 =head1 REPOSITORY
 
